@@ -1,16 +1,15 @@
 <?php
 require_once 'member_repository.php';
 
-class member_service {
-    private $conn;
+class MemberService {
+    private $repo;
 
     public function __construct() {
-        $this->conn = DB::getConnection();
+        $this->repo = new MemberRepository();
     }
 
     public function getAll() {
-        $stmt = $this->conn->query("SELECT * FROM Members ORDER BY ParentId ASC, Name ASC");
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $this->repo->getAll();
     }
 
     public function buildTree(array $elements, $ParentId = null): array {
@@ -47,11 +46,6 @@ class member_service {
     }
 
     public function addMember($Name, $ParentId = null): int {
-        $stmt = $this->conn->prepare("INSERT INTO Members (Name, ParentId, CreatedDate) VALUES (:Name, :ParentId, NOW())");
-        $stmt->execute([
-            ':Name' => $Name,
-            ':ParentId' => $ParentId
-        ]);
-        return $this->conn->lastInsertId();
+        return $this->repo->insert($Name, $ParentId);
     }
 }

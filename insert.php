@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $ParentId = $ParentId ?: null;
 
-    $service = new member_service();
+    $service = new MemberService();
     $Id = $service->addMember($Name, $ParentId);
 
     $ParentName = null;
